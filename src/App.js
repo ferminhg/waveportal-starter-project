@@ -9,7 +9,7 @@ const App = () => {
    * Just a state variable we use to store our user's public wallet.
   */
   const [currentAccount, setCurrentAccount] = useState("");
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contractAddress = "0xeBF91308DB3b4a8deE31aedC6bc31FDA393F2730";
   const contractABI = abi.abi;
 
 
