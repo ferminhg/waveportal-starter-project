@@ -6,7 +6,7 @@ const App = () => {
    * Just a state variable we use to store our user's public wallet.
   */
   const [currentAccount, setCurrentAccount] = useState("");
-  const checkIfWalletIsConnected = () => {
+  const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
     if (!ethereum) {
       console.log("Make sure you have metamask!");
