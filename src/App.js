@@ -8,10 +8,11 @@ const App = () => {
   /*
    * Just a state variable we use to store our user's public wallet.
   */
+  const [allWaves, setAllWaves] = useState([]);
   const [currentAccount, setCurrentAccount] = useState("");
   const contractAddress = "0x7f98496cfcf1F4C12E7d69839E6D8A534dc3fb7f";
   const contractABI = abi.abi;
-  const [allWaves, setAllWaves] = useState([]);
+
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -30,7 +31,8 @@ const App = () => {
       }
       const account = accounts[0];
       console.log("Found an authorized account:", account);
-      setCurrentAccount(account)
+      setCurrentAccount(account);
+      getAllWaves();
     } catch (error) {
       console.log(error);
     }
@@ -39,29 +41,29 @@ const App = () => {
   const wave = async () => {
     try {
       const { ethereum } = window;
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-
-        let count = await wavePortalContract.getTotalWaves();
-        console.log("Retrieved total wave count...", count.toNumber());
-
-        /*
-        * Execute the actual wave from your smart contract
-        */
-        const waveTxn = await wavePortalContract.wave("wopwop");
-        console.log("Mining...", waveTxn.hash);
-
-        await waveTxn.wait();
-        console.log("Mined -- ", waveTxn.hash);
-
-        count = await wavePortalContract.getTotalWaves();
-        console.log("Retrieved total wave count...", count.toNumber());
-      } else {
+      
+      if (!ethereum) {
         console.log("Ethereum object doesn't exist!");
+        return
       }
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+      let count = await wavePortalContract.getTotalWaves();
+      console.log("Retrieved total wave count...", count.toNumber());
+
+      /*
+      * Execute the actual wave from your smart contract
+      */
+      const waveTxn = await wavePortalContract.wave("wopwop");
+      console.log("Mining...", waveTxn.hash);
+
+      await waveTxn.wait();
+      console.log("Mined -- ", waveTxn.hash);
+
+      count = await wavePortalContract.getTotalWaves();
+      console.log("Retrieved total wave count...", count.toNumber());
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +105,7 @@ const App = () => {
          * Call the getAllWaves method from your Smart Contract
          */
         const waves = await wavePortalContract.getAllWaves();
-
+        console.log("Retrieved all waves...", waves);
 
         /*
          * We only need address, timestamp, and message in our UI so let's
